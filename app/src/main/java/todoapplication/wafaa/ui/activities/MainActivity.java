@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     TextView calender1 ;
 
     boolean timeTrue ;
+    public static boolean isTrue  = false;
     public static boolean inGrid;
 
     public static AppDatabase mDb;
@@ -474,13 +475,31 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    onResume();
+                    isTrue=false;
+                toggleEmptyNotes();
 
                 }
 
         });
 
 
+    }
+    public void toggleEmptyNotes() {
+        // you can check notesList.size() > 0
+
+        if (MainActivity.notesList.size() > 0) {
+            mFragment = new HomeFragment();
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.fragment,mFragment);
+            ft.commit();
+        } else {
+            mFragment = new EmptyFragment();
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.fragment,mFragment);
+            ft.commit();
+        }
     }
 
     @Override
@@ -500,27 +519,39 @@ public class MainActivity extends AppCompatActivity {
                 HomeFragment.mAdapter.setNotesList(notes);
                 notesCount = notes.size();
                 notesList = notes;
-                notesListCopy = notes;
 
             }
         });
 
     }
 
+
     public void homeAll(View view){
 
+            homeClicked();
+
+    }
+
+    public void homeClicked(){
 
         all.setBackgroundColor(Color.parseColor("#ffffff"));
         all.setTextColor(Color.parseColor("#5A94E4"));
 
-        today.setBackgroundColor(0x00000000);
+        today.setBackgroundColor(Color.parseColor("#5A94E4"));
         today.setTextColor(Color.parseColor("#ffffff"));
 
-        tomorrow.setBackgroundColor(0x00000000);
+        tomorrow.setBackgroundColor(Color.parseColor("#5A94E4"));
         tomorrow.setTextColor(Color.parseColor("#ffffff"));
 
-        calender1.setBackgroundColor(0x00000000);
+        calender1.setBackgroundColor(Color.parseColor("#5A94E4"));
         calender1.setTextColor(Color.parseColor("#ffffff"));
+
+        if(!isTrue){
+            notesListCopy.clear();
+            notesListCopy.addAll(notesList);
+            isTrue = true;
+        }
+
 
         notesList.clear();
         notesList.addAll(notesListCopy);
@@ -538,7 +569,6 @@ public class MainActivity extends AppCompatActivity {
             ft.replace(R.id.fragment,mFragment);
             ft.commit();
         }
-
 
     }
 
@@ -566,15 +596,21 @@ public class MainActivity extends AppCompatActivity {
         int year23 = Integer.parseInt(parts[2]);
         String today = day + "-" + month + "-" + year23;
 
-        int num = notesListCopy.size();
+        if (!isTrue){
+            notesListCopy.clear();
+            notesListCopy.addAll(notesList);
+            isTrue = true;
+        }
+
+
+
         notesList.clear();
         notesList.addAll(notesListCopy);
 
-        num = notesList.size();
-        for (int i =0 ;i < num ; i ++ ){
-            String dat = notesList.get(i).getDateStart();
-            if (dat ==today)
-                notesList2.add(notesList.get(i));
+        for (Note note : notesList ){
+            String dat = note.getDateStart();
+            if (dat.equals(today))
+                notesList2.add(note);
         }
 
         notesList.clear();

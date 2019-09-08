@@ -22,9 +22,8 @@ public interface noteDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateNote(Note note);
 
-    @Delete
-    void deleteNote(Note note);
-
+    @Query("DELETE FROM notes WHERE id = :id")
+    void deleteNote(int id);
 
 
 }

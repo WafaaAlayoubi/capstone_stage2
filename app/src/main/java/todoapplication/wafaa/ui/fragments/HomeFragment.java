@@ -2,6 +2,8 @@ package todoapplication.wafaa.ui.fragments;
 
 
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -57,6 +59,8 @@ public class HomeFragment extends Fragment {
 
     String category = "personal" ;
 
+    Fragment mFragment;
+
     boolean timeTrue ;
 
 
@@ -99,6 +103,8 @@ public class HomeFragment extends Fragment {
                 if(!MainActivity.inGrid)
                 showActionsDialog(position);
 
+
+
             }
         }));
 
@@ -121,15 +127,35 @@ public class HomeFragment extends Fragment {
                        @Override
                        public void run() {
                            List<Note> notes1 = mAdapter.getNotesList();
-                           MainActivity.mDb.noteDao().deleteNote(notes1.get(position));
-                           MainActivity.notesList.clear();
-                           MainActivity.notesList.addAll(notes1);
+                           MainActivity.mDb.noteDao().deleteNote(notes1.get(position).getId());
+                           MainActivity.isTrue =false;
+                           ((MainActivity)getActivity()).homeClicked();
+                          // toggleEmptyNotes();
+
+
+
                        }
                    });
                 }
             }
         });
         builder.show();
+    }
+    public void toggleEmptyNotes() {
+
+        if (MainActivity.notesList.size() > 0) {
+            mFragment = new HomeFragment();
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.fragment,mFragment);
+            ft.commit();
+        } else {
+            mFragment = new EmptyFragment();
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.fragment,mFragment);
+            ft.commit();
+        }
     }
 
 
@@ -505,7 +531,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        mAdapter.setNotesList(MainActivity.notesList);
+       // mAdapter.setNotesList(MainActivity.notesList);
 
     }
 
