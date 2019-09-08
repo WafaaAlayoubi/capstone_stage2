@@ -5,31 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activities.MainActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/header">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/rectangle3"
-                android:adjustViewBounds="true"></ImageView>
-
-
-        </FrameLayout>
-
-
-    </LinearLayout>
 
     <fragment
         android:id="@+id/fragment"
         android:name="todoapplication.wafaa.ui.fragments.HomeFragment"
-        android:layout_below="@+id/header"
         android:layout_above="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

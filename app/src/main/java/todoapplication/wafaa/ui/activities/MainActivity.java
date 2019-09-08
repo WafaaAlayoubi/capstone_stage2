@@ -1,5 +1,6 @@
 package todoapplication.wafaa.ui.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,12 +15,17 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -45,6 +51,7 @@ import todoapplication.wafaa.notification.AlertReceiver;
 import todoapplication.wafaa.ui.fragments.EmptyFragment;
 import todoapplication.wafaa.ui.fragments.GridFragment;
 import todoapplication.wafaa.ui.fragments.HomeFragment;
+import todoapplication.wafaa.widget.NewAppWidget;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
@@ -538,7 +545,6 @@ public class MainActivity extends AppCompatActivity {
                 notesList = notes;
                 toggleEmptyNotes();
 
-
             }
         });
 
@@ -546,6 +552,28 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.to_do, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_add_to_widget) {
+
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+            int [] appWidgetIds =appWidgetManager.getAppWidgetIds(new ComponentName(this,NewAppWidget.class));
+
+            NewAppWidget appWidget = new NewAppWidget();
+            appWidget.onUpdate(this,appWidgetManager,appWidgetIds);
+            return true;
+        } else
+            return super.onOptionsItemSelected(item);
+
+    }
 
 
 
