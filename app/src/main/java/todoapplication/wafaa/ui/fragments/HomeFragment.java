@@ -1,11 +1,15 @@
 package todoapplication.wafaa.ui.fragments;
 
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 
@@ -37,9 +41,13 @@ import todoapplication.wafaa.R;
 import todoapplication.wafaa.adapters.NotesAdapter;
 import todoapplication.wafaa.database.AppExecutor;
 import todoapplication.wafaa.models.Note;
+import todoapplication.wafaa.notification.AlertReceiver;
 import todoapplication.wafaa.rv.MyDividerItemDecoration;
 import todoapplication.wafaa.rv.RecyclerTouchListener;
 import todoapplication.wafaa.ui.activities.MainActivity;
+
+import static android.content.Context.ALARM_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +70,9 @@ public class HomeFragment extends Fragment {
     Fragment mFragment;
 
     boolean timeTrue ;
+
+    ImageView bell;
+    ImageView finish;
 
 
 
@@ -94,6 +105,159 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onClick(View view, int position) {
+
+                bell = (ImageView)view.findViewById(R.id.bell);
+                finish = (ImageView)view.findViewById(R.id.finsih);
+
+
+                finish.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        Note n = MainActivity.notesList.get(position);
+
+                        if(n.getFinish().equals("0")) {
+                            // updating note text
+                            n.setFinish("1");
+
+                            // updating note in db
+                            AppExecutor.getInstance().diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MainActivity.mDb.noteDao().updateNote(n);
+                                }
+                            });
+
+                            // refreshing the list
+                            mAdapter.notifyItemChanged(position);
+                            toggleEmptyNotes();
+
+                        }else if(n.getFinish().equals("1")) {
+                            // updating note text
+                            n.setFinish("0");
+
+                            // updating note in db
+                            AppExecutor.getInstance().diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MainActivity.mDb.noteDao().updateNote(n);
+                                }
+                            });
+
+                            // refreshing the list
+                            MainActivity.notesList.set(position, n);
+                            mAdapter.notifyItemChanged(position);
+                            toggleEmptyNotes();
+
+                        }
+
+
+
+                    }
+                });
+
+                bell.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        Note n = MainActivity.notesList.get(position);
+
+                        if(n.getAlert().equals("0")) {
+                            // updating note text
+                            String string1 = n.getTimestart();
+                            String[] parts1 = string1.split(":");
+                            int hour = Integer.parseInt(parts1[0]);
+                            int minute1 = Integer.parseInt(parts1[1]);
+                            Calendar calendar = Calendar.getInstance();
+
+                            String string2 = n.getDateStart();
+                            String[] parts = string2.split("-");
+                            int day = Integer.parseInt(parts[0]);
+                            int month = Integer.parseInt(parts[1]);
+                            int year23 = Integer.parseInt(parts[2]);
+
+                            calendar.set(Calendar.HOUR_OF_DAY, hour);
+                            calendar.set(Calendar.MINUTE, minute1);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.DAY_OF_MONTH,day);
+                            calendar.set(Calendar.MONTH,month-1);
+                            calendar.set(Calendar.YEAR,year23);
+
+                            ((MainActivity)getActivity()).alert(n,position,calendar);
+
+                            n.setAlert("1");
+
+                            // updating note in db
+                            AppExecutor.getInstance().diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MainActivity.mDb.noteDao().updateNote(n);
+                                }
+                            });
+
+                            // refreshing the list
+                            MainActivity.notesList.set(position, n);
+                            mAdapter.notifyItemChanged(position);
+                            toggleEmptyNotes();
+
+                        }else if(n.getAlert().equals("1")) {
+                            // updating note text
+                            n.setAlert("0");
+
+                            // updating note in db
+                            AppExecutor.getInstance().diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MainActivity.mDb.noteDao().updateNote(n);
+                                }
+                            });
+
+                            // refreshing the list
+                            MainActivity.notesList.set(position, n);
+                            mAdapter.notifyItemChanged(position);
+
+                            ((MainActivity)getActivity()).alert2();
+
+                            for(int i = 0;i<MainActivity.notesList.size();i++){
+                                if(MainActivity.notesList.get(i).getAlert().equals("1")){
+
+                                    Note n1 = MainActivity.notesList.get(i);
+                                    String string1 = n1.getTimestart();
+                                    String[] parts1 = string1.split(":");
+                                    int hour = Integer.parseInt(parts1[0]);
+                                    int minute1 = Integer.parseInt(parts1[1]);
+                                    Calendar calendar = Calendar.getInstance();
+
+                                    String string2 = n1.getDateStart();
+                                    String[] parts = string2.split("-");
+                                    int day = Integer.parseInt(parts[0]);
+                                    int month = Integer.parseInt(parts[1]);
+                                    int year23 = Integer.parseInt(parts[2]);
+
+                                    calendar.set(Calendar.HOUR_OF_DAY, hour);
+                                    calendar.set(Calendar.MINUTE, minute1);
+                                    calendar.set(Calendar.SECOND, 0);
+                                    calendar.set(Calendar.DAY_OF_MONTH,day);
+                                    calendar.set(Calendar.MONTH,month-1);
+                                    calendar.set(Calendar.YEAR,year23);
+
+
+                                    ((MainActivity)getActivity()).alert(n1,i,calendar);
+
+                                }
+                            }
+
+
+                            toggleEmptyNotes();
+
+                        }
+
+
+
+                    }
+                });
 
             }
 
@@ -128,9 +292,7 @@ public class HomeFragment extends Fragment {
                        public void run() {
                            List<Note> notes1 = mAdapter.getNotesList();
                            MainActivity.mDb.noteDao().deleteNote(notes1.get(position).getId());
-                           MainActivity.isTrue =false;
-                           ((MainActivity)getActivity()).homeClicked();
-                          // toggleEmptyNotes();
+                          toggleEmptyNotes();
 
 
 

@@ -7,12 +7,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,9 +41,12 @@ import todoapplication.wafaa.database.AppDatabase;
 import todoapplication.wafaa.database.AppExecutor;
 import todoapplication.wafaa.models.MainViewModel;
 import todoapplication.wafaa.models.Note;
+import todoapplication.wafaa.notification.AlertReceiver;
 import todoapplication.wafaa.ui.fragments.EmptyFragment;
 import todoapplication.wafaa.ui.fragments.GridFragment;
 import todoapplication.wafaa.ui.fragments.HomeFragment;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,14 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView imgHome;
     ImageView imgGrid;
-    LinearLayout days_header;
+
 
     String category = "personal" ;
 
-    TextView all ;
-    TextView today ;
-    TextView tomorrow ;
-    TextView calender1 ;
+
 
     boolean timeTrue ;
     public static boolean isTrue  = false;
@@ -91,17 +94,12 @@ public class MainActivity extends AppCompatActivity {
 
         imgHome = (ImageView) findViewById(R.id.home);
         imgGrid = (ImageView) findViewById(R.id.grid);
-        days_header = findViewById(R.id.days_header);
-        all = (TextView) findViewById(R.id.all);
-        today = (TextView) findViewById(R.id.today);
-        tomorrow = (TextView) findViewById(R.id.tomorrow);
-        calender1 = (TextView) findViewById(R.id.calendar);
-
 
         imgHome.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                days_header.setVisibility(View.VISIBLE);
+
                 inGrid = false;
                 timeTrue = true;
                 imgGrid.setImageResource(R.drawable.grid);
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         imgGrid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                days_header.setVisibility(View.GONE);
+
                 imgHome.setImageResource(R.drawable.home2);
                 imgGrid.setImageResource(R.drawable.grid2);
                 mFragment = new GridFragment();
@@ -484,8 +482,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void alert(Note n,int position,Calendar calendar){
+        Intent alertIntent = new Intent(getApplicationContext(), AlertReceiver.class)
+                .putExtra("taskName",n.getNote())
+                .putExtra("position",position);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE );
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), PendingIntent.getBroadcast(getApplicationContext(), 1, alertIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT ));
+    }
+
+    public void alert2(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent myIntent = new Intent(getApplicationContext(), AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(), 1, myIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.cancel(pendingIntent);
+    }
     public void toggleEmptyNotes() {
-        // you can check notesList.size() > 0
 
         if (MainActivity.notesList.size() > 0) {
             mFragment = new HomeFragment();
@@ -519,6 +536,8 @@ public class MainActivity extends AppCompatActivity {
                 HomeFragment.mAdapter.setNotesList(notes);
                 notesCount = notes.size();
                 notesList = notes;
+                toggleEmptyNotes();
+
 
             }
         });
@@ -526,175 +545,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void homeAll(View view){
-
-            homeClicked();
-
-    }
-
-    public void homeClicked(){
-
-        all.setBackgroundColor(Color.parseColor("#ffffff"));
-        all.setTextColor(Color.parseColor("#5A94E4"));
-
-        today.setBackgroundColor(Color.parseColor("#5A94E4"));
-        today.setTextColor(Color.parseColor("#ffffff"));
-
-        tomorrow.setBackgroundColor(Color.parseColor("#5A94E4"));
-        tomorrow.setTextColor(Color.parseColor("#ffffff"));
-
-        calender1.setBackgroundColor(Color.parseColor("#5A94E4"));
-        calender1.setTextColor(Color.parseColor("#ffffff"));
-
-        if(!isTrue){
-            notesListCopy.clear();
-            notesListCopy.addAll(notesList);
-            isTrue = true;
-        }
-
-
-        notesList.clear();
-        notesList.addAll(notesListCopy);
-        if (notesList.size() > 0) {
-            mFragment = new HomeFragment();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fragment,mFragment);
-            ft.commit();
-
-        } else {
-            mFragment = new EmptyFragment();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fragment,mFragment);
-            ft.commit();
-        }
-
-    }
-
-    public void todayAll(View view){
-
-        today.setBackgroundColor(Color.parseColor("#ffffff"));
-        today.setTextColor(Color.parseColor("#5A94E4"));
-
-        all.setBackgroundColor(0x00000000);
-        all.setTextColor(Color.parseColor("#ffffff"));
-
-        tomorrow.setBackgroundColor(0x00000000);
-        tomorrow.setTextColor(Color.parseColor("#ffffff"));
-
-        calender1.setBackgroundColor(0x00000000);
-        calender1.setTextColor(Color.parseColor("#ffffff"));
-        List<Note> notesList2 = new ArrayList<>();
-
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = df.format(c);
-        String[] parts = formattedDate.split("-");
-        int day = Integer.parseInt(parts[0]);
-        int month = Integer.parseInt(parts[1]);
-        int year23 = Integer.parseInt(parts[2]);
-        String today = day + "-" + month + "-" + year23;
-
-        if (!isTrue){
-            notesListCopy.clear();
-            notesListCopy.addAll(notesList);
-            isTrue = true;
-        }
 
 
 
-        notesList.clear();
-        notesList.addAll(notesListCopy);
-
-        for (Note note : notesList ){
-            String dat = note.getDateStart();
-            if (dat.equals(today))
-                notesList2.add(note);
-        }
-
-        notesList.clear();
-        notesList.addAll(notesList2);
-
-        if (notesList2.size() > 0) {
-            mFragment = new HomeFragment();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fragment,mFragment);
-            ft.commit();
-
-
-        } else {
-            mFragment = new EmptyFragment();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fragment,mFragment);
-            ft.commit();
-        }
-
-    }
-
-    public void tomorrowAll(View view){
-
-        tomorrow.setBackgroundColor(Color.parseColor("#ffffff"));
-        tomorrow.setTextColor(Color.parseColor("#5A94E4"));
-
-        all.setBackgroundColor(0x00000000);
-        all.setTextColor(Color.parseColor("#ffffff"));
-
-        today.setBackgroundColor(0x00000000);
-        today.setTextColor(Color.parseColor("#ffffff"));
-
-        calender1.setBackgroundColor(0x00000000);
-        calender1.setTextColor(Color.parseColor("#ffffff"));
-
-        List<Note> notesList2 = new ArrayList<>();
-
-        notesList.clear();
-        notesList.addAll(notesListCopy);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date c = calendar.getTime();
-
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = df.format(c);
-        String[] parts = formattedDate.split("-");
-        int day = Integer.parseInt(parts[0]);
-        int month = Integer.parseInt(parts[1]);
-        int year23 = Integer.parseInt(parts[2]);
-        String today = day + "-" + month + "-" + year23;
-
-        GridFragment.notesList3.clear();
-        GridFragment.notesList3.addAll(notesList);
-
-        for (Note note:MainActivity.notesList){
-            if (note.getDateStart().equals(today))
-                notesList2.add(note);
-        }
-
-        notesList.clear();
-        notesList = notesList2;
-
-        if (notesList2.size() > 0) {
-            mFragment = new HomeFragment();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fragment,mFragment);
-            ft.commit();
-
-
-        } else {
-            mFragment = new EmptyFragment();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fragment,mFragment);
-            ft.commit();
-        }
 
 
 
-    }
+
 
 
 
