@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_margin"
-    android:paddingRight="@dimen/activity_margin"
+    android:paddingStart="@dimen/activity_margin"
+    android:paddingEnd="@dimen/activity_margin"
     android:paddingTop="@dimen/activity_margin">
 
     <ImageView android:id="@+id/dialog_title"
@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_extra_large"
         android:src="@drawable/addnewtask"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:contentDescription="@null"/>
 
     <EditText
         android:textColor="@color/date_and_time"
@@ -39,21 +40,24 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:src="@drawable/personalon"/>
+            android:src="@drawable/personalon"
+            android:contentDescription="@null"/>
         <ImageView
             android:id="@+id/work"
             android:layout_gravity="center"
             android:layout_width="@dimen/zero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/work"/>
+            android:src="@drawable/work"
+            android:contentDescription="@null"/>
         <ImageView
             android:id="@+id/meeting"
             android:layout_gravity="center"
             android:layout_width="@dimen/zero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/meeting"/>
+            android:src="@drawable/meeting"
+            android:contentDescription="@null"/>
     </LinearLayout>
 
     <LinearLayout
@@ -68,21 +72,24 @@
             android:layout_width="@dimen/zero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/shopping"/>
+            android:src="@drawable/shopping"
+            android:contentDescription="@null"/>
         <ImageView
             android:id="@+id/party"
             android:layout_gravity="center"
             android:layout_width="@dimen/zero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/party"/>
+            android:src="@drawable/party"
+            android:contentDescription="@null"/>
         <ImageView
             android:id="@+id/study"
             android:layout_gravity="center"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/study"/>
+            android:src="@drawable/study"
+            android:contentDescription="@null"/>
     </LinearLayout>
 
 
@@ -104,7 +111,7 @@
                 android:layout_gravity="center"
                 android:id="@+id/in_date"
                 android:textSize="@dimen/text_extra_large"
-                android:text="Date Start"
+                android:text="@string/date_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/date_and_time"/>
@@ -114,7 +121,7 @@
                 android:id="@+id/in_time"
                 android:layout_width="@dimen/diloag_width"
                 android:gravity="center"
-                android:text="Time Start"
+                android:text="@string/time_start"
                 android:layout_height="wrap_content"
                 android:textColor="@color/date_and_time"/>
 
@@ -124,7 +131,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:src="@drawable/asset1"/>
+            android:src="@drawable/asset1"
+            android:contentDescription="@null"/>
 
         <LinearLayout
             android:layout_width="@dimen/zero"
@@ -136,7 +144,7 @@
                 android:textSize="@dimen/text_extra_large"
                 android:gravity="center"
                 android:id="@+id/in_dateend"
-                android:text="Date End"
+                android:text="@string/date_end"
                 android:layout_width="@dimen/diloag_width"
                 android:layout_height="wrap_content"
                 android:textColor="@color/date_and_time"/>
@@ -144,7 +152,7 @@
                 android:layout_gravity="center"
                 android:id="@+id/in_time3"
                 android:gravity="center"
-                android:text="Time End"
+                android:text="@string/time_end"
                 android:textSize="@dimen/text_extra_large"
                 android:layout_width="@dimen/diloag_width"
                 android:layout_height="wrap_content"

@@ -5,13 +5,14 @@
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
     android:paddingBottom="@dimen/dimen_10"
-    android:paddingLeft="@dimen/activity_margin"
-    android:paddingRight="@dimen/activity_margin"
+    android:paddingStart="@dimen/activity_margin"
+    android:paddingEnd="@dimen/activity_margin"
     android:paddingTop="@dimen/dimen_10">
 <ImageView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:src="@drawable/task"/>
+    android:src="@drawable/task"
+    android:contentDescription="@null"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,15 +24,17 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:src="@drawable/green"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"/>
 
     <ImageView android:id="@+id/finsih"
-        android:layout_alignLeft="@+id/dot"
+        android:layout_alignStart="@+id/dot"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:src="@drawable/finishoff"/>
+        android:src="@drawable/finishoff"
+        android:contentDescription="@null"/>
 
     <TextView
         android:id="@+id/timestart"
@@ -39,7 +42,7 @@
         android:layout_weight="1"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/dot"
+        android:layout_toEndOf="@id/dot"
         android:textColor="@color/timestamp"
         android:textSize="@dimen/timestamp" />
 
@@ -50,7 +53,7 @@
         android:layout_gravity="center"
         android:layout_height="wrap_content"
         android:layout_below="@id/timestart"
-        android:layout_toRightOf="@id/dot"
+        android:layout_toEndOf="@id/dot"
         android:textColor="@color/note_list_text"
         android:textSize="@dimen/note_list_text" />
 
@@ -61,7 +64,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:layout_gravity="center"
-            android:src="@drawable/smallbellof"/>
+            android:src="@drawable/smallbellof"
+            android:contentDescription="@null"/>
     </LinearLayout>
 
 </RelativeLayout>

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/noTask"
             android:layout_gravity="center"
-
+            android:contentDescription="@null"
             android:src="@drawable/group12"/>
 
         <ImageView
@@ -27,6 +27,7 @@
             android:layout_below="@+id/noTask"
             android:src="@drawable/notasks"
             android:layout_gravity="center"
+            android:contentDescription="@null"
             />
         <ImageView
             android:layout_width="wrap_content"
@@ -34,6 +35,7 @@
             android:layout_below="@+id/noTask"
             android:src="@drawable/you"
             android:layout_gravity="center"
+            android:contentDescription="@null"
             />
 
     </LinearLayout>

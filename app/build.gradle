@@ -1,12 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs{
+        config {
+            keyAlias 'upload'
+            keyPassword '9517538264'
+            storeFile file('upload-store.jks')
+            storePassword '7895123'
+        }
+    }
     compileSdkVersion 28
+
     buildToolsVersion "28.0.3"
     defaultConfig {
         multiDexEnabled true
         applicationId "todoapplication.wafaa"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -21,6 +30,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     compileOptions {
@@ -53,5 +63,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-ads:18.2.0'
 
+    implementation 'com.google.firebase:firebase-core:17.0.0'
 
 }
+apply plugin: 'com.google.gms.google-services'

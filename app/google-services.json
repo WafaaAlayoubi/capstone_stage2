@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "450921634244",
+    "firebase_url": "https://todo-f533d.firebaseio.com",
+    "project_id": "todo-f533d",
+    "storage_bucket": "todo-f533d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450921634244:android:b376a27a50f2185d86ec91",
+        "android_client_info": {
+          "package_name": "todoapplication.wafaa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450921634244-8j91u0ua9qgeavki0mu4e8bccmo5vpun.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClMwIyNRYlL-Px9NCDcwkthw8Kf64S_Do"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450921634244-8j91u0ua9qgeavki0mu4e8bccmo5vpun.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

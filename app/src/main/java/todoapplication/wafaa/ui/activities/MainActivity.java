@@ -17,11 +17,16 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -106,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
+
+        NetworkUtilTask netTask = new NetworkUtilTask(this);
+        netTask.execute();
 
         imgHome = (ImageView) findViewById(R.id.home);
         imgGrid = (ImageView) findViewById(R.id.grid);
@@ -333,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
                                     Date date2=new SimpleDateFormat("dd-MM-yyyy").parse(sDate2);
 
                                     if(date1.compareTo(date2) > 0){
-                                        Toast.makeText(MainActivity.this, "Date1 is after Date2", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MainActivity.this, ""+R.string.toast_date, Toast.LENGTH_LONG).show();
                                     }
                                     else if (date1.compareTo(date2) == 0){
                                         timeTrue = false;
@@ -405,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
                                     int hour = Integer.parseInt(parts1[0]);
                                     int minute1 = Integer.parseInt(parts1[1]);
                                     if(hour > hourOfDay){
-                                        Toast.makeText(MainActivity.this, "Time end befor Time start!", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MainActivity.this, ""+R.string.toast_time1, Toast.LENGTH_LONG).show();
 
                                     }else if (hour == hourOfDay){
                                         if(minute1 < minute){
@@ -413,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                                             txtTime2.setText(hourOfDay + ":" + minute);
                                         }
                                         else{
-                                            Toast.makeText(MainActivity.this, "Time end should be after Time start!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(MainActivity.this, ""+R.string.toast_time2, Toast.LENGTH_LONG).show();
                                         }
                                     }
                                     else{
@@ -452,19 +460,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Show toast message when no text is entered
                 if (TextUtils.isEmpty(inputNote.getText().toString())) {
-                    Toast.makeText(MainActivity.this, "Enter note!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, ""+R.string.toast_enter_note, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (txtDate.getText().equals("Date Start")) {
-                    Toast.makeText(MainActivity.this, "Enter date!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, ""+R.string.toast_enter_date, Toast.LENGTH_SHORT).show();
                     return;
                 }else if (txtDate2.getText().equals("Date End")) {
-                    Toast.makeText(MainActivity.this, "Enter date!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, ""+R.string.toast_enter_date, Toast.LENGTH_SHORT).show();
                     return;
                 }  else if (txtTime.getText().equals("Time Start")) {
-                    Toast.makeText(MainActivity.this, "Enter start time!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, ""+R.string.toast_enter_start_time, Toast.LENGTH_SHORT).show();
                     return;
                 }  else if (txtTime2.getText().equals("Time End")) {
-                    Toast.makeText(MainActivity.this, "Enter end time!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, ""+R.string.toast_enter_end_time, Toast.LENGTH_SHORT).show();
                     return;
                 }else {
                     alertDialog.dismiss();
@@ -584,7 +592,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private class NetworkUtilTask extends AsyncTask<Void, Void, Boolean> {
+        Context context;
 
+        public NetworkUtilTask(Context context){
+            this.context = context;
+        }
+
+        protected Boolean doInBackground(Void... params) {
+            return hasActiveInternetConnection(this.context);
+        }
+        protected void onPostExecute(Boolean hasActiveConnection) {
+            Log.d("internet","Success=" + hasActiveConnection);
+        }
+    }
+
+    public boolean hasActiveInternetConnection(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager
+                .getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
 
 

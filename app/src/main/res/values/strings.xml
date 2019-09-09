@@ -11,4 +11,18 @@
     <string name="add_widget">Add widget</string>
     <string name="add_to_widget">Add to widget</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="toast_date">Date1 is after Date2</string>
+    <string name="toast_time1">Time end befor Time start!</string>
+    <string name="toast_time2">Time end should be after Time start!</string>
+    <string name="toast_enter_note">Enter note!</string>
+    <string name="toast_enter_date">Enter date!</string>
+    <string name="toast_enter_start_time">Enter start time!</string>
+    <string name="toast_enter_end_time">Enter end time!</string>
+    <string name="toast_Date1_after_Date2">Date1 is after Date2</string>
+    <string name="toast_Timeend_befor_Timestart">Time end befor Time start!</string>
+    <string name="toast_Timeend_after_Timestart">Time end should be after Time start!</string>
+    <string name="date_start">Date Start</string>
+    <string name="date_end">Date End</string>
+    <string name="time_start">Time Start</string>
+    <string name="time_end">Time End</string>
 </resources>

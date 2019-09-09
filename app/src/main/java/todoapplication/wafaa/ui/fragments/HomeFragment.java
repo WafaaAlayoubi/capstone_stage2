@@ -520,7 +520,7 @@ public class HomeFragment extends Fragment {
                                     Date date2=new SimpleDateFormat("dd-MM-yyyy").parse(sDate2);
 
                                     if(date1.compareTo(date2) > 0){
-                                        Toast.makeText(getActivity(), "Date1 is after Date2", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), ""+R.string.toast_Date1_after_Date2, Toast.LENGTH_LONG).show();
                                     }
                                     else if (date1.compareTo(date2) == 0){
                                         timeTrue = false;
@@ -592,7 +592,7 @@ public class HomeFragment extends Fragment {
                                     int hour = Integer.parseInt(parts1[0]);
                                     int minute1 = Integer.parseInt(parts1[1]);
                                     if(hour > hourOfDay){
-                                        Toast.makeText(getActivity(), "Time end befor Time start!", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), ""+R.string.toast_Timeend_befor_Timestart, Toast.LENGTH_LONG).show();
 
                                     }else if (hour == hourOfDay){
                                         if(minute1 < minute){
@@ -600,7 +600,7 @@ public class HomeFragment extends Fragment {
                                             txtTime2.setText(hourOfDay + ":" + minute);
                                         }
                                         else{
-                                            Toast.makeText(getActivity(), "Time end should be after Time start!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getActivity(), ""+R.string.toast_Timeend_after_Timestart, Toast.LENGTH_LONG).show();
                                         }
                                     }
                                     else{
@@ -645,19 +645,19 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 // Show toast message when no text is entered
                 if (TextUtils.isEmpty(inputNote.getText().toString())) {
-                    Toast.makeText(getActivity(), "Enter note!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), ""+R.string.toast_enter_note, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (txtDate.getText().equals("Date Start")) {
-                    Toast.makeText(getActivity(), "Enter date!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), ""+R.string.toast_enter_date, Toast.LENGTH_SHORT).show();
                     return;
                 }else if (txtDate2.getText().equals("Date End")) {
-                    Toast.makeText(getActivity(), "Enter date!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), ""+R.string.toast_enter_date, Toast.LENGTH_SHORT).show();
                     return;
                 }  else if (txtTime.getText().equals("Time Start")) {
-                    Toast.makeText(getActivity(), "Enter start time!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), ""+R.string.toast_enter_start_time, Toast.LENGTH_SHORT).show();
                     return;
                 }  else if (txtTime2.getText().equals("Time End")) {
-                    Toast.makeText(getActivity(), "Enter end time!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), ""+R.string.toast_enter_end_time, Toast.LENGTH_SHORT).show();
                     return;
                 }else {
                     alertDialog.dismiss();

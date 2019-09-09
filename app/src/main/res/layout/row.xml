@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:gravity="center_vertical"
-    android:paddingLeft="6dip"
+    android:paddingStart="6dip"
     android:textSize="@dimen/text_small"
     android:textColor="@android:color/white"
     android:minHeight="?android:attr/listPreferredItemHeight"
